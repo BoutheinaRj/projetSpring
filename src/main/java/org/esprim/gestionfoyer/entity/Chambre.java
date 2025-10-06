@@ -1,6 +1,11 @@
 package org.esprim.gestionfoyer.entity;
 import jakarta.persistence.*;
+import lombok.*;
 
+import java.util.Date;
+@Data
+@Getter
+@Setter
 @Entity
 public class Chambre {
     @Id
