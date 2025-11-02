@@ -1,23 +1,29 @@
 package org.esprim.gestionfoyer.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.*;
-
+import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
-public class Reservation {
+public class Reservation implements Serializable {
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long idReservation;
-    private Date anneUnniversitaire;
+    private String idReservation;
+
+    @Temporal(TemporalType.DATE)
+    private Date anneeUniversitaire;
+
     private boolean estValide;
+
+    @ManyToOne
+    @JoinColumn(name = "id_chambre")
+    private Chambre chambre;
+
+    @ManyToMany(mappedBy = "reservations", cascade = CascadeType.ALL)
+    private List<Etudiant> etudiants;
 }
