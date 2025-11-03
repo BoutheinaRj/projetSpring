@@ -19,6 +19,7 @@ public class UniversityRestController {
 
     @GetMapping("/retrieve-universite/{universite-id}")
     public Universite retrieveUniversiteById(@PathVariable("universite-id") Long universiteId) {
+
         return universiteService.retrieveUniversite(universiteId);
     }
 
