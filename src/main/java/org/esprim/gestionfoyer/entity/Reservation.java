@@ -24,6 +24,6 @@ public class Reservation implements Serializable {
     @JoinColumn(name = "id_chambre")
     private Chambre chambre;
 
-    @ManyToMany(mappedBy = "reservations", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
     private List<Etudiant> etudiants;
 }

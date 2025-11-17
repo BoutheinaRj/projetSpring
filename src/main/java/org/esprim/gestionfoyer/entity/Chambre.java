@@ -14,7 +14,7 @@ public class Chambre implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idChambre;
-
+ 
     private Long numeroChambre;
 
     @Enumerated(EnumType.STRING)
@@ -27,3 +27,4 @@ public class Chambre implements Serializable {
     @OneToMany(mappedBy = "chambre", cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 }
+

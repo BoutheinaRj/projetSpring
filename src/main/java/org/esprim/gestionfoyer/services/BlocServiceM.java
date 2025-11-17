@@ -1,5 +1,10 @@
 package org.esprim.gestionfoyer.services;
+
 import org.esprim.gestionfoyer.entity.Bloc;
+import org.esprim.gestionfoyer.entity.Chambre;
+import org.esprim.gestionfoyer.repositories.BlocRepository;
+import org.esprim.gestionfoyer.repositories.ChambreRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -7,29 +12,74 @@ import java.util.List;
 @Service
 public class BlocServiceM implements BlocService {
 
+    @Autowired
+    private BlocRepository blocRepository;
+
+    @Autowired
+    private ChambreRepository chambreRepository;
 
     @Override
     public List<Bloc> retrieveAllBlocs() {
-        return List.of();
+        return blocRepository.findAll();
     }
 
     @Override
     public Bloc retrieveBloc(Long idBloc) {
-        return null;
+        return blocRepository.findById(idBloc)
+                .orElseThrow(() -> new RuntimeException(
+                        "Bloc not found with id : " + idBloc));
     }
 
     @Override
     public Bloc addBloc(Bloc bloc) {
-        return null;
+        return blocRepository.save(bloc);
     }
 
     @Override
     public Bloc updateBloc(Bloc bloc) {
-        return null;
+        return blocRepository.save(bloc);
     }
 
     @Override
     public void removeBloc(Long idBloc) {
+        blocRepository.deleteById(idBloc);
+    }
 
+    @Override
+    public Bloc affecterChambreABloc(List<Long> numeroChambre, Long idBloc) {
+
+        // Récupérer le bloc
+        Bloc bloc = blocRepository.findById(idBloc)
+                .orElseThrow(() -> new RuntimeException(
+                        "Bloc introuvable avec cet id : " + idBloc));
+
+        // Récupérer les chambres via leurs numéros
+        List<Chambre> chambres =
+                chambreRepository.findAllByNumeroChambreIn(numeroChambre);
+
+        if (chambres.size() != numeroChambre.size()) {
+            throw new RuntimeException("Une ou plusieurs chambres sont introuvables");
+        }
+
+
+        //Affecter chaque chambre au bloc
+        for (Chambre chambre : chambres) {
+
+            if (chambre.getBloc() != null) {
+                throw new RuntimeException(
+                        "La chambre numéro " + chambre.getNumeroChambre()
+                                + " appartient déjà au bloc : "
+                                + chambre.getBloc().getNomBloc());
+            }
+
+            chambre.setBloc(bloc);
+        }
+
+
+        //Sauvegarder les chambres modifiées
+        chambreRepository.saveAll(chambres);
+
+        //Retourner le bloc mis à jour
+        return bloc;
     }
 }
