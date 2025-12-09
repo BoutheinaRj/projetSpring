@@ -44,4 +44,9 @@ public class BlocRestController  {
         Bloc bloc = blocService.updateBloc(b);
         return bloc;
     }
+@PostMapping("/affect-chambres-a-bloc/{blocId}")
+    Bloc affectChambresABloc(@PathVariable("blocId") Long idBloc
+        , @RequestBody List<Long> numchambres) {
+        return blocService.affecterChambreABloc(numchambres, idBloc);
+}
 }

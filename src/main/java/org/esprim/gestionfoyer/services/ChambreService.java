@@ -20,4 +20,7 @@ public interface ChambreService {
 
     List<Chambre> getChambresParNomUniversite(String nomUniversite);
     List<Chambre> getChambresParBlocEtType (long idBloc, TypeChambre typeC) ;
+    // Services de scheduling
+    void pourcentageChambreParTypeChambre();        // Service 02
+    void nbPlacesDisponibleParChambreAnneeEnCours();
 }

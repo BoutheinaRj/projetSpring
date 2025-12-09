@@ -1,14 +1,16 @@
 package org.esprim.gestionfoyer.services;
 
+import lombok.extern.slf4j.Slf4j;
 import org.esprim.gestionfoyer.entity.Bloc;
 import org.esprim.gestionfoyer.entity.Chambre;
 import org.esprim.gestionfoyer.repositories.BlocRepository;
 import org.esprim.gestionfoyer.repositories.ChambreRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
+@Slf4j
 @Service
 public class BlocServiceM implements BlocService {
 
@@ -82,4 +84,17 @@ public class BlocServiceM implements BlocService {
         //Retourner le bloc mis à jour
         return bloc;
     }
+    @Scheduled(cron = "0 * * * * *")  // toutes les minutes
+    public void listeChambresParBloc() {
+
+        List<Bloc> blocs = blocRepository.findAll();
+
+        if (!blocs.isEmpty()) {
+            for (Bloc bloc : blocs) {
+                log.info("Bloc => " + bloc.getNomBloc() +
+                        " ayant une capacité " + bloc.getCapaciteBloc());
+            }
+        }
+    }
+
 }
